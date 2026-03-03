@@ -2,17 +2,17 @@ name: CI
 
 on:
   push:
-    branches: ["**"]
   pull_request:
 
 jobs:
-  lint-and-test:
+  test:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - name: Set up Python
+      - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
@@ -20,16 +20,19 @@ jobs:
       - name: Install uv
         run: curl -LsSf https://astral.sh/uv/install.sh | sh
 
+      - name: Add uv to PATH
+        run: echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+
       - name: Install dependencies
         run: uv sync
 
       - name: Ruff format check
         run: uv run ruff format --check .
 
-      - name: Ruff linter
+      - name: Ruff lint
         run: uv run ruff check .
 
-      - name: Type checking
+      - name: Type check
         run: uv run mypy .
 
       - name: Unit tests
@@ -38,5 +41,5 @@ jobs:
       - name: Integration tests
         run: uv run pytest core/tests/integration
 
-      - name: BDD tests
+      - name: Behaviour tests
         run: uv run pytest core/tests/behaviour
