@@ -3,29 +3,40 @@ name: CI
 on:
   push:
     branches: ["**"]
+  pull_request:
 
 jobs:
   lint-and-test:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
 
       - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
 
       - name: Install uv
+        run: curl -LsSf https://astral.sh/uv/install.sh | sh
 
       - name: Install dependencies
+        run: uv sync
 
-      - name: Install ruff and mypy
-
-      - name: Ruff format
+      - name: Ruff format check
+        run: uv run ruff format --check .
 
       - name: Ruff linter
+        run: uv run ruff check .
 
-      - name: Mypy
+      - name: Type checking
+        run: uv run mypy .
 
       - name: Unit tests
+        run: uv run pytest core/tests/unit
 
       - name: Integration tests
+        run: uv run pytest core/tests/integration
 
       - name: BDD tests
+        run: uv run pytest core/tests/behaviour
