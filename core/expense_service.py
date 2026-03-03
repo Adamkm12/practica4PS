@@ -28,10 +28,12 @@ class ExpenseService:
         title: str,
         amount: float,
         description: str = "",
-        expense_date: date = None,
+        expense_date: date | None = None,
     ) -> Expense:
-        if expense_date == None:
+
+        if expense_date is None:
             expense_date = date.today()
+
         expense = Expense(
             id=self._next_id,
             title=title,
@@ -39,8 +41,10 @@ class ExpenseService:
             description=description,
             expense_date=expense_date,
         )
+
         self._repository.save(expense)
         self._next_id += 1
+
         return expense
 
     def remove_expense(self, expense_id: int) -> None:
@@ -53,27 +57,29 @@ class ExpenseService:
         amount: float | None = None,
         description: str | None = None,
     ) -> None:
+
         expense = self._repository.get_by_id(expense_id)
+
         if not expense:
             return
+
         if title is not None:
             expense.title = title
+
         if amount is not None:
             expense.amount = amount
+
         if description is not None:
             expense.description = description
+
         self._repository.save(expense)
 
     def list_expenses(self) -> list[Expense]:
         return self._repository.list_all()
 
     def total_amount(self) -> float:
-        """
-        # FIXME:
-        Debería de devolver la suma de los amounts de todos los Expenses, ahora mismo parece devolver 0 solamente.
-        :return:
-        """
-        return 0
+        # Corrección: se calcula la suma real de los gastos en lugar de devolver 0
+        return sum(expense.amount for expense in self._repository.list_all())
 
     def total_by_month(self) -> dict[str, float]:
         totals = defaultdict(float)
