@@ -20,7 +20,8 @@ def context():
 
 @given(parsers.parse("un gestor de gastos vacío"))
 def empty_manager(context):
-    pass
+    assert context["service"].list_expenses() == []
+    assert context["service"].total_amount() == 0
 
 
 @given(parsers.parse("un gestor con un gasto de {amount:d} euros"))
