@@ -98,7 +98,6 @@ def test_create_multiple_expenses_and_list():
     assert len(expenses) == 2
     assert expenses[0].title == "Pan"
     assert expenses[1].title == "Leche"
-    
 
 
 def test_remove_expense_reduces_total():
@@ -145,7 +144,6 @@ def test_update_expense_partial_fields():
     assert expense.title == "Camiseta"
     assert expense.amount == 18
     assert expense.description == "Ropa"
-
 
 
 def test_total_amount_after_removal():

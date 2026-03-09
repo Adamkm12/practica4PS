@@ -3,8 +3,10 @@ class DomainError(Exception):
 
     pass
 
+
 class idError(DomainError):
     pass
+
 
 class EmptyTitleError(DomainError):
     pass
