@@ -5,6 +5,7 @@ from core.domain_error import (
     InvalidAmountError,
     InvalidExpenseDateError,
     EmptyTitleError,
+    idError,
 )
 
 
@@ -30,3 +31,7 @@ class Expense:
             raise InvalidExpenseDateError(
                 "La fecha del gasto no puede ser posterior a hoy"
             )
+        
+        if self.id < 0:
+            raise idError("El id debe ser mayor a 0")
+        
